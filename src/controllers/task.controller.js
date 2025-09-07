@@ -37,3 +37,23 @@ export const getTaskById = async (req, res) => {
     res.status(404).json({ error: `Task ${id} not found` });
   }
 };
+
+export const updateTask = async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  try {
+    const task = await Todo.findOneAndUpdate(
+      { _id: id, user: req.user.id },
+      { user: req.user.id, ...body },
+      { new: true, runValidators: true }
+    );
+
+    if (task.length === 0) {
+      return res.status(404).json({ message: `Task ${id} not found` });
+    }
+
+    res.status(200).json({ message: `Task updated` });
+  } catch (e) {
+    res.status(404).json({ error: `Task ${id} not found` });
+  }
+};

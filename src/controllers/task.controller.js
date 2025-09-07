@@ -57,3 +57,18 @@ export const updateTask = async (req, res) => {
     res.status(404).json({ error: `Task ${id} not found` });
   }
 };
+
+export const deleteTask = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const task = await Todo.findOneAndDelete({ _id: id, user: req.user.id });
+
+    if (task.length === 0) {
+      return res.status(404).json({ message: `Task ${id} not found` });
+    }
+
+    res.status(200).json({ message: `Task deleted` });
+  } catch (e) {
+    res.status(404).json({ error: `Task ${id} not found` });
+  }
+};

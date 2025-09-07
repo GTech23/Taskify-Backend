@@ -17,9 +17,23 @@ app.use(helmet());
 app.use(cors());
 app.disable("x-powered-by");
 
+app.get("/", (req, res) => {
+  res.status(200).send(`<h3> Welcome to my Taskify Backend <h3>`);
+});
 app.use("/user", authRoute);
 app.use("/task", taskRouter);
 
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
+});
+
+app.use((err, req, res, next) => {
+  next(err);
+  res.status(500).send(`<h3> Internal Server Error </h3>`);
+});
 app.listen(PORT, () => {
   console.log(`Server connected to PORT ${PORT}`);
 });

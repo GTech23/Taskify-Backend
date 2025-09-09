@@ -15,6 +15,7 @@ await db();
 app.use(express.json({ limit: "10kb" }));
 app.use(helmet());
 app.use(cors());
+app.use(express.urlencoded({extended: true}))
 app.disable("x-powered-by");
 
 app.get("/", (req, res) => {

@@ -13,14 +13,14 @@ const PORT = process.env.PORT;
 await db();
 
 app.use(express.json({ limit: "10kb" }));
-app.use(helmet());
+
 app.use(cors());
-app.use(express.urlencoded({extended: true}))
 app.disable("x-powered-by");
 
 app.get("/", (req, res) => {
   res.status(200).send(`<h3> Welcome to my Taskify Backend <h3>`);
 });
+
 app.use("/user", authRoute);
 app.use("/task", taskRouter);
 

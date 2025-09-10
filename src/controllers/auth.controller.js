@@ -12,8 +12,9 @@ export const register = async (req, res) => {
 
     res.status(201).json({ message: "User created" });
   } catch (err) {
+    console.log(err)
     if(err.code === 11000){
-      const field = Object.keys(err.keyValue)[0]
+      const field = Object.keys(err.keyValue)
       return res.status(400).json({
         success: false,
         message: `${field.charAt(0).toUpperCase() + field.slice(1)} is already in use`,

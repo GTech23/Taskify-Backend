@@ -3,25 +3,27 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const hashed = await bcrypt.hash(password, 10);
+try {
+  const { username, email, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
 
-    const user = new User({ username, email, password: hashed });
-    await user.save();
+  const user = new User({ username, email, password: hashed });
+  await user.save();
 
-    res.status(201).json({ message: "User created" });
-  } catch (err) {
-    console.log(err)
-    if(err.code === 11000){
-      const field = Object.keys(err.keyValue)
-      return res.status(400).json({
-        success: false,
-        message: `${field.charAt(0).toUpperCase() + field.slice(1)} is already in use`,
-      })
-    }
-    res.status(500).json({ error: err.message });
+  res.status(201).json({ message: "User created" });
+} catch (err) {
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+
+    return res.status(400).json({
+      success: false,
+      message: `${field.charAt(0).toUpperCase() + field.slice(1)} is already in use`,
+    });
   }
+
+  return res.status(500).json({ error: err.message });
+}
+
 };
 
 export const login = async (req, res) => {
